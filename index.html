@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-slate-900 text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VTC Tunisie Ultra - Plateforme Nationale VTC</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            tnGreen: '#008751',
+            tnGreenHover: '#006b40',
+            tnRed: '#E70013',
+            darkCard: '#1E293B',
+            darkNav: '#0F172A'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #008751;
+    }
+    .phone-mockup {
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px 2px rgba(0, 135, 81, 0.25);
+    }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col bg-slate-950 text-slate-100">
+
+  <!-- TOP GLOBAL NAVIGATION HEADER -->
+  <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-tnGreen to-emerald-400 flex items-center justify-center font-black text-white text-xl shadow-lg shadow-tnGreen/30">
+          🇹🇳
+        </div>
+        <div>
+          <span class="font-bold text-lg tracking-tight text-white flex items-center gap-2">
+            VTC Tunisie <span class="bg-tnGreen text-xs px-2 py-0.5 rounded-full text-white font-semibold uppercase tracking-wider">Ultra</span>
+          </span>
+          <span class="text-xs text-slate-400 block -mt-1">Plateforme 100% Cash & Transparente</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center gap-1 bg-slate-800/60 p-1 rounded-xl border border-slate-700/50">
+        <button onclick="switchTab('booking')" id="nav-booking" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-tnGreen text-white shadow-sm">
+          <i class="fa-solid fa-car-side mr-2"></i>Réserver (Client)
+        </button>
+        <button onclick="switchTab('recruitment')" id="nav-recruitment" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:text-white hover:bg-slate-700/50">
+          <i class="fa-solid fa-id-card mr-2"></i>Devenir Chauffeur
+        </button>
+        <button onclick="switchTab('simulator')" id="nav-simulator" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:text-white hover:bg-slate-700/50">
+          <i class="fa-solid fa-mobile-screen-button mr-2"></i>App Chauffeur (Simulateur)
+        </button>
+        <button onclick="switchTab('admin')" id="nav-admin" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:text-white hover:bg-slate-700/50">
+          <i class="fa-solid fa-user-shield mr-2"></i>Panneau Admin
+        </button>
+      </nav>
+
+      <!-- System Status Indicator -->
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Backend Actif (Port 5001)</span>
+        </div>
+        <button onclick="toggleMobileMenu()" class="md:hidden text-slate-300 hover:text-white p-2">
+          <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-menu" class="hidden md:hidden bg-slate-900 border-b border-slate-800 px-4 py-3 space-y-2">
+      <button onclick="switchTab('booking'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-white bg-slate-800">
+        <i class="fa-solid fa-car-side mr-2 text-tnGreen"></i>Réserver un Trajet
+      </button>
+      <button onclick="switchTab('recruitment'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-300">
+        <i class="fa-solid fa-id-card mr-2 text-tnGreen"></i>Inscription Chauffeur (4 Champs)
+      </button>
+      <button onclick="switchTab('simulator'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-300">
+        <i class="fa-solid fa-mobile-screen-button mr-2 text-tnGreen"></i>App Chauffeur + Recharge RIB
+      </button>
+      <button onclick="switchTab('admin'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-300">
+        <i class="fa-solid fa-user-shield mr-2 text-tnGreen"></i>Administration / Recharges
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO STATS BAR -->
+  <section class="bg-gradient-to-r from-slate-900 via-emerald-950/30 to-slate-900 border-b border-slate-800/80 py-4 px-4 sm:px-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+      <div class="p-2 rounded-lg bg-slate-800/40 border border-slate-700/40">
+        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Paiement Passager</div>
+        <div class="text-lg font-extrabold text-emerald-400 flex items-center justify-center gap-1 mt-0.5">
+          <i class="fa-solid fa-money-bill-wave text-base"></i> 100% Cash
+        </div>
+      </div>
+      <div class="p-2 rounded-lg bg-slate-800/40 border border-slate-700/40">
+        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Part Chauffeur</div>
+        <div class="text-lg font-extrabold text-white mt-0.5">
+          75% <span class="text-xs font-normal text-slate-400">Revenus Nets</span>
+        </div>
+      </div>
+      <div class="p-2 rounded-lg bg-slate-800/40 border border-slate-700/40">
+        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Commission Plateforme</div>
+        <div class="text-lg font-extrabold text-amber-400 mt-0.5">
+          25% <span class="text-xs font-normal text-slate-400">Déduits du Wallet</span>
+        </div>
+      </div>
+      <div class="p-2 rounded-lg bg-slate-800/40 border border-slate-700/40">
+        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Recharge Chauffeur</div>
+        <div class="text-lg font-extrabold text-sky-400 mt-0.5 flex items-center justify-center gap-1">
+          <i class="fa-solid fa-building-columns text-sm"></i> RIB Amen Bank / D17
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTAINER WITH TABS -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- TAB 1: BOOKING MODE (CLIENT) -->
+    <section id="tab-booking" class="tab-content block space-y-8">
+      <div class="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left: Booking Form -->
+        <div class="lg:col-span-7 bg-slate-800/80 rounded-2xl p-6 sm:p-8 border border-slate-700/60 shadow-xl backdrop-blur-sm">
+          <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-700/60">
+            <div>
+              <h2 class="text-2xl font-bold text-white">Commander une Course</h2>
+              <p class="text-xs text-slate-400 mt-1">Payez directement en espèces au chauffeur à l'arrivée.</p>
+            </div>
+            <span class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs rounded-full font-medium">
+              Mode Cash Exclusif
+            </span>
+          </div>
+
+          <form id="booking-form" onsubmit="handleBookingSubmit(event)" class="space-y-5">
+            <div>
+              <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
+                <i class="fa-solid fa-location-dot text-tnGreen mr-1.5"></i>Lieu de Prise en Charge (Départ)
+              </label>
+              <select id="pickup-location" onchange="calculateFare()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-tnGreen">
+                <option value="Tunis Centre">Tunis Centre (Avenue Habib Bourguiba)</option>
+                <option value="La Marsa">La Marsa (Corniche)</option>
+                <option value="Ennasr">Ennasr 2</option>
+                <option value="Aéroport Tunis-Carthage">Aéroport Tunis-Carthage</option>
+                <option value="Les Berges du Lac">Les Berges du Lac 1 & 2</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-slate-300 uppercase tracking-wider mb-2">
+                <i class="fa-solid fa-flag-checkered text-tnRed mr-1.5"></i>Destination Finale
+              </label>
+              <select id="dropoff-location" onchange="calculateFare()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-tnGreen">
+                <option value="Aéroport Tunis-Carthage">Aéroport Tunis-Carthage</option>
+                <option value="La Marsa" selected>La Marsa (Corniche)</option>
+                <option value="Sidi Bou Saïd">Sidi Bou Saïd</option>
+                <option value="Gammarth">Gammarth</option>
+                <option value="Tunis Centre">Tunis Centre</option>
+              </select>
+            </div>
+
+            <!-- Calculated Fare & Details -->
+            <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-700/80 space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-slate-400">Distance Estimée :</span>
+                <span id="calc-distance" class="font-semibold text-slate-200">12.5 km</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-slate-400">Temps de Trajet :</span>
+                <span id="calc-time" class="font-semibold text-slate-200">18 min</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-slate-400">Chauffeur le plus proche :</span>
+                <span class="text-xs font-medium px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
+                  <i class="fa-solid fa-car text-xs mr-1"></i> Mohamed S. (3 min)
+                </span>
+              </div>
+              <div class="pt-3 border-t border-slate-800 flex justify-between items-end">
+                <div>
+                  <span class="text-xs text-slate-400 block uppercase">Prix Total (Cash)</span>
+                  <span id="calc-price" class="text-3xl font-extrabold text-emerald-400">15.000 <span class="text-sm font-semibold">TND</span></span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-slate-500 block">Commission VTC Ultra (25%)</span>
+                  <span id="calc-commission" class="text-xs font-semibold text-amber-400">3.750 TND (Auto-déduit)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Payment Method Pre-selected -->
+            <div class="p-3 bg-emerald-950/40 border border-emerald-500/30 rounded-xl flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                  <i class="fa-solid fa-wallet"></i>
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-white">Mode de Paiement Unique</div>
+                  <div class="text-[11px] text-slate-300">100% Cash direct au Chauffeur</div>
+                </div>
+              </div>
+              <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+            </div>
+
+            <button type="submit" class="w-full bg-gradient-to-r from-tnGreen to-emerald-600 hover:from-tnGreenHover hover:to-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-tnGreen/30 transition-all flex items-center justify-center gap-2 text-base">
+              <i class="fa-solid fa-paper-plane"></i> Demander le Chauffeur (100% Cash)
+            </button>
+          </form>
+        </div>
+
+        <!-- Right: Realtime Simulation Map / Status -->
+        <div class="lg:col-span-5 bg-slate-800/80 rounded-2xl p-6 border border-slate-700/60 shadow-xl space-y-5">
+          <h3 class="font-bold text-lg text-white flex items-center justify-between">
+            <span>Carte & Trajet Direct</span>
+            <span class="text-xs font-normal text-slate-400 bg-slate-900 px-2.5 py-1 rounded-full border border-slate-700">GPS Live</span>
+          </h3>
+
+          <!-- Visual Fake Map Box -->
+          <div class="relative w-full h-64 bg-slate-950 rounded-xl border border-slate-700/70 overflow-hidden flex items-center justify-center p-4 text-center group">
+            <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#008751_1px,transparent_1px)] [background-size:16px_16px]"></div>
+            
+            <!-- Simulated Route Graphic -->
+            <div class="relative z-10 space-y-3">
+              <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 border border-slate-700 text-xs text-slate-300 shadow-md">
+                <span class="w-2.5 h-2.5 rounded-full bg-tnGreen animate-ping"></span>
+                <span>Chauffeur en route vers vous</span>
+              </div>
+              <div class="text-4xl">🚕💨</div>
+              <div class="text-xs text-slate-400 max-w-xs">
+                Zone du Grand Tunis : 14 Chauffeurs actifs prêts à vous prendre en charge.
+              </div>
+            </div>
+
+            <div class="absolute bottom-3 right-3 bg-slate-900/90 text-[10px] text-slate-400 px-2 py-1 rounded border border-slate-800 font-mono">
+              36.8065° N, 10.1815° E
+            </div>
+          </div>
+
+          <!-- Active Booking Confirmation Box (Hidden by default) -->
+          <div id="booking-confirmation-box" class="hidden p-4 bg-slate-900 rounded-xl border border-emerald-500/40 space-y-2 animate-fade-in">
+            <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+              <i class="fa-solid fa-circle-check"></i> Course Demandée avec Succès !
+            </div>
+            <p class="text-xs text-slate-300">
+              Le chauffeur <strong class="text-white">Mohamed S. (Clio 4)</strong> a accepté votre course. Préparez la somme exacte en espèces à la fin du trajet.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 2: DRIVER RECRUITMENT (4 FIELDS ONLY) -->
+    <section id="tab-recruitment" class="tab-content hidden space-y-8">
+      <div class="max-w-2xl mx-auto bg-slate-800/90 rounded-2xl p-6 sm:p-10 border border-slate-700/70 shadow-2xl relative overflow-hidden">
+        
+        <div class="absolute -top-12 -right-12 w-32 h-32 bg-tnGreen/10 rounded-full blur-2xl pointer-events-none"></div>
+
+        <div class="text-center mb-8">
+          <span class="px-3 py-1 bg-tnGreen/20 text-emerald-400 text-xs font-bold rounded-full uppercase tracking-wider">
+            Inscription Simplifiée 4 Champs
+          </span>
+          <h2 class="text-3xl font-extrabold text-white mt-3">Rejoignez la Flotte VTC Ultra</h2>
+          <p class="text-sm text-slate-400 mt-2">
+            Conservez <strong>75% de vos gains en espèces</strong> chaque jour. Inscription rapide en moins de 1 minute.
+          </p>
+        </div>
+
+        <form id="recruitment-form" onsubmit="handleRecruitmentSubmit(event)" class="space-y-5">
+          
+          <!-- Field 1: Full Name -->
+          <div>
+            <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+              1. Nom complet *
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                <i class="fa-solid fa-user"></i>
+              </span>
+              <input type="text" id="driver-fullname" required placeholder="ex: Youssef Ben Ali" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-tnGreen">
+            </div>
+          </div>
+
+          <!-- Field 2: Phone Number -->
+          <div>
+            <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+              2. Numéro de téléphone *
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                <i class="fa-solid fa-phone"></i>
+              </span>
+              <input type="tel" id="driver-phone" required placeholder="ex: 22 123 456" pattern="[0-9]{8}" title="Veuillez entrer un numéro à 8 chiffres" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-tnGreen">
+            </div>
+          </div>
+
+          <!-- Field 3: Vehicle Model -->
+          <div>
+            <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+              3. Modèle du véhicule *
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                <i class="fa-solid fa-car"></i>
+              </span>
+              <input type="text" id="driver-vehicle" required placeholder="ex: Renault Symbol / Peugeot 208" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-tnGreen">
+            </div>
+          </div>
+
+          <!-- Field 4: License Plate -->
+          <div>
+            <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+              4. Numéro d'immatriculation *
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                <i class="fa-solid fa-id-card"></i>
+              </span>
+              <input type="text" id="driver-plate" required placeholder="ex: 215 TU 9876" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-tnGreen">
+            </div>
+          </div>
+
+          <!-- Terms info box -->
+          <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-800 text-xs text-slate-400">
+            <i class="fa-solid fa-shield-halved text-tnGreen mr-1"></i> En vous inscrivant, vous acceptez le modèle <strong>25% de commission déduite de votre Portefeuille virtuel</strong> avec recharge effectuée vers <strong>votre RIB Amen Bank (07308006410581111081)</strong>.
+          </div>
+
+          <button type="submit" class="w-full bg-gradient-to-r from-tnGreen to-emerald-600 hover:from-tnGreenHover hover:to-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-tnGreen/30 transition-all text-base flex items-center justify-center gap-2">
+            <i class="fa-solid fa-user-plus"></i> Valider mon Inscription Chauffeur
+          </button>
+
+        </form>
+
+        <!-- Success Message -->
+        <div id="recruitment-success" class="hidden mt-6 p-4 bg-emerald-950/80 border border-emerald-500/40 rounded-xl text-center space-y-2">
+          <div class="text-emerald-400 text-xl font-bold">🎉 Bienvenue dans l'équipe !</div>
+          <p class="text-xs text-slate-200">Votre dossier a été enregistré sur le port 5001. Vous pouvez dès à présent vous connecter sur le simulateur d'application ci-dessous.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 3: DRIVER MOBILE APP SIMULATOR (WITH WALLET & RIB RECHARGE) -->
+    <section id="tab-simulator" class="tab-content hidden">
+      <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- Left Explanatory Banner -->
+        <div class="lg:col-span-5 space-y-5">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-tnGreen/20 border border-tnGreen/40 text-emerald-400 text-xs font-semibold uppercase tracking-wider">
+            Interface Smartphone Chauffeur
+          </div>
+          <h2 class="text-3xl font-extrabold text-white leading-tight">
+            Gérez votre Solde et vos Courses en Temps Réel
+          </h2>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Voici l'application mobile que vos chauffeurs utiliseront sur leur téléphone Android. Les commissions sont prélevées au fur et à mesure sur leur <strong>Portefeuille Virtuel (Wallet)</strong>.
+          </p>
+
+          <div class="space-y-3">
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/60 flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+                <i class="fa-solid fa-money-bill-1-wave"></i>
+              </div>
+              <div class="text-xs">
+                <strong class="text-white block font-semibold">100% Cash en Main</strong>
+                <span class="text-slate-400">Le chauffeur garde la totalité de l'argent donné par les passagers.</span>
+              </div>
+            </div>
+
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/60 flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+                <i class="fa-solid fa-wallet"></i>
+              </div>
+              <div class="text-xs">
+                <strong class="text-white block font-semibold">Solde Négatif = Commissions dues</strong>
+                <span class="text-slate-400">Si le solde descend sous le seuil (-100 TND), les courses sont bloquées jusqu'à la recharge.</span>
+              </div>
+            </div>
+
+            <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/60 flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center shrink-0 mt-0.5">
+                <i class="fa-solid fa-building-columns"></i>
+              </div>
+              <div class="text-xs">
+                <strong class="text-white block font-semibold">Recharge facile vers votre RIB Amen Bank</strong>
+                <span class="text-slate-400">Le chauffeur effectue son virement vers <strong>07308006410581111081</strong> et soumet sa preuve en 1 clic.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <button onclick="triggerSimulatedRide()" class="px-5 py-3 bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/40 font-bold rounded-xl text-xs flex items-center gap-2 transition-all">
+              <i class="fa-solid fa-bolt"></i> Simuler une Course Terminée (+15 TND Cash / -3.75 TND Wallet)
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Mobile Phone Mockup -->
+        <div class="lg:col-span-7 flex justify-center">
+          
+          <div class="phone-mockup w-full max-w-sm bg-slate-950 rounded-[40px] p-4 border-4 border-slate-800 relative overflow-hidden">
+            
+            <!-- Phone Speaker Bar -->
+            <div class="w-32 h-4 bg-slate-800 mx-auto rounded-full mb-3 flex items-center justify-center">
+              <div class="w-10 h-1 bg-slate-700 rounded-full"></div>
+            </div>
+
+            <!-- Phone Screen Inner Container -->
+            <div class="bg-slate-900 rounded-[30px] p-4 text-slate-100 min-h-[580px] flex flex-col justify-between border border-slate-800">
+              
+              <!-- App Top Header -->
+              <div>
+                <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-tnGreen text-white font-bold text-xs flex items-center justify-center">
+                      YS
+                    </div>
+                    <div>
+                      <div class="text-xs font-bold text-white">Youssef B.</div>
+                      <div class="text-[10px] text-emerald-400 font-medium">Chauffeur Vérifié</div>
+                    </div>
+                  </div>
+                  <!-- Online Duty Toggle Button -->
+                  <button id="duty-toggle-btn" onclick="toggleDriverDuty()" class="px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span id="duty-status-text">EN SERVICE</span>
+                  </button>
+                </div>
+
+                <!-- Wallet Card Widget -->
+                <div class="mt-4 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-4 border border-slate-700/80 shadow-lg space-y-3">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <span class="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">Portefeuille Commissions</span>
+                      <span id="app-wallet-balance" class="text-2xl font-black text-rose-400 mt-0.5 block">-45.000 <span class="text-xs font-semibold text-slate-300">TND</span></span>
+                    </div>
+                    <span class="px-2 py-0.5 bg-rose-500/20 text-rose-400 text-[10px] rounded border border-rose-500/30 font-semibold">
+                      Commissions Dues
+                    </span>
+                  </div>
+
+                  <p class="text-[11px] text-slate-400 leading-tight">
+                    Vos commissions de 25% sont prélevées ici. Rechargez sur votre RIB Amen Bank pour continuer.
+                  </p>
+
+                  <button onclick="openRechargeModal()" class="w-full bg-tnGreen hover:bg-tnGreenHover text-white text-xs font-bold py-2.5 rounded-xl shadow transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-building-columns"></i> Recharger sur votre RIB Amen Bank
+                  </button>
+                </div>
+
+                <!-- Driver Ride Simulation Activity Box -->
+                <div class="mt-4 bg-slate-800/60 rounded-xl p-3 border border-slate-800 space-y-2">
+                  <div class="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
+                    <span>Activité Aujourd'hui</span>
+                    <span class="text-emerald-400 text-xs">4 Courses</span>
+                  </div>
+                  <div class="flex justify-between text-xs text-slate-400 pt-1 border-t border-slate-800">
+                    <span>Total Cash Encaissé:</span>
+                    <strong class="text-white font-semibold">68.000 TND</strong>
+                  </div>
+                  <div class="flex justify-between text-xs text-slate-400">
+                    <span>Part Plateforme (25%):</span>
+                    <strong class="text-amber-400 font-semibold">-17.000 TND</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Driver Bottom Action Footer -->
+              <div class="pt-3 border-t border-slate-800">
+                <div class="text-[10px] text-center text-slate-500 mb-2">
+                  Connexion Sécurisée au Serveur VTC Ultra
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-center text-xs">
+                  <button class="py-2 rounded-lg bg-slate-800 text-slate-300 font-semibold border border-slate-700">
+                    <i class="fa-solid fa-clock-rotate-left mr-1"></i>Historique
+                  </button>
+                  <button onclick="openRechargeModal()" class="py-2 rounded-lg bg-slate-800 text-emerald-400 font-semibold border border-emerald-500/30">
+                    <i class="fa-solid fa-qrcode mr-1"></i>RIB Amen Bank
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 4: SUPER ADMIN DASHBOARD -->
+    <section id="tab-admin" class="tab-content hidden space-y-6">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-800/80 p-6 rounded-2xl border border-slate-700">
+        <div>
+          <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-user-shield text-tnGreen"></i> Panneau d'Administration & Recharges
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Supervision globale, gestion des portefeuilles chauffeurs et validation des virements vers votre RIB Amen Bank (07308006410581111081).</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="refreshAdminData()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-xs font-bold transition-all">
+            <i class="fa-solid fa-rotate-right mr-1.5"></i>Actualiser Données
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin Overview Stats -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-slate-800/80 p-5 rounded-xl border border-slate-700 space-y-1">
+          <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold block">Chauffeurs Enregistrés</span>
+          <span id="admin-stat-drivers" class="text-3xl font-black text-white">4</span>
+        </div>
+        <div class="bg-slate-800/80 p-5 rounded-xl border border-slate-700 space-y-1">
+          <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold block">Total Commissions Collectées</span>
+          <span id="admin-stat-commissions" class="text-3xl font-black text-emerald-400">142.500 TND</span>
+        </div>
+        <div class="bg-slate-800/80 p-5 rounded-xl border border-slate-700 space-y-1">
+          <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold block">Recharges RIB en Attente</span>
+          <span id="admin-stat-pending" class="text-3xl font-black text-amber-400">1</span>
+        </div>
+      </div>
+
+      <!-- Pending RIB Recharges Verification Panel -->
+      <div class="bg-slate-800/80 rounded-2xl p-6 border border-slate-700 space-y-4">
+        <h3 class="font-bold text-lg text-white flex items-center gap-2">
+          <i class="fa-solid fa-file-invoice-dollar text-amber-400"></i> Demandes de Recharge à Vérifier (RIB Amen Bank / D17)
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm text-slate-300">
+            <thead class="text-xs text-slate-400 uppercase bg-slate-900/80 border-b border-slate-700">
+              <tr>
+                <th class="py-3.5 px-4">Date</th>
+                <th class="py-3.5 px-4">Chauffeur</th>
+                <th class="py-3.5 px-4">Méthode</th>
+                <th class="py-3.5 px-4">Montant Virement</th>
+                <th class="py-3.5 px-4">Preuve de Paiement</th>
+                <th class="py-3.5 px-4 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-recharge-table-body" class="divide-y divide-slate-700/60">
+              <!-- Dynamically Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Drivers Management Table -->
+      <div class="bg-slate-800/80 rounded-2xl p-6 border border-slate-700 space-y-4">
+        <h3 class="font-bold text-lg text-white flex items-center gap-2">
+          <i class="fa-solid fa-users text-tnGreen"></i> Liste & Soldes des Chauffeurs
+        </h3>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm text-slate-300">
+            <thead class="text-xs text-slate-400 uppercase bg-slate-900/80 border-b border-slate-700">
+              <tr>
+                <th class="py-3.5 px-4">Nom</th>
+                <th class="py-3.5 px-4">Téléphone</th>
+                <th class="py-3.5 px-4">Véhicule</th>
+                <th class="py-3.5 px-4">Solde Wallet (TND)</th>
+                <th class="py-3.5 px-4">Statut</th>
+                <th class="py-3.5 px-4 text-center">Action Admin</th>
+              </tr>
+            </thead>
+            <tbody id="admin-drivers-table-body" class="divide-y divide-slate-700/60">
+              <!-- Dynamically Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- RECHARGE MODAL (DRIVER APP POPUP WITH YOUR EXACT RIB AMEN BANK & D17 PROOF SUBMISSION) -->
+  <div id="recharge-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 w-full max-w-lg rounded-2xl p-6 shadow-2xl relative space-y-5 animate-scale-up">
+      
+      <!-- Close Button -->
+      <button onclick="closeRechargeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="flex items-center gap-3 pb-3 border-b border-slate-800">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-lg">
+          <i class="fa-solid fa-building-columns"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-white">Recharger le Portefeuille Chauffeur</h3>
+          <p class="text-xs text-slate-400">Effectuez votre virement vers votre RIB Amen Bank puis envoyez la preuve.</p>
+        </div>
+      </div>
+
+      <!-- BANK RIB & DETAILS BOX -->
+      <div class="bg-slate-800/90 rounded-xl p-4 border border-emerald-500/30 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">VOTRE RIB AMEN BANK</span>
+          <span class="text-[10px] bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/40">Amen Bank Tunisie</span>
+        </div>
+
+        <div class="space-y-1 text-xs">
+          <div class="text-slate-400">Titulaire du compte : <strong class="text-white">VTC Tunisie Ultra SARL</strong></div>
+          <div class="text-slate-400">Banque : <strong class="text-white">Amen Bank (Agence Tunis Central)</strong></div>
+        </div>
+
+        <div class="bg-slate-950 p-3 rounded-lg border border-slate-700 flex items-center justify-between">
+          <div>
+            <span class="text-[10px] text-slate-500 block uppercase font-mono">VOTRE RIB (20 chiffres)</span>
+            <code id="amen-rib-text" class="text-sm font-bold text-white font-mono">07308006410581111081</code>
+          </div>
+          <button onclick="copyRIB()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1">
+            <i class="fa-solid fa-copy"></i> Copier le RIB
+          </button>
+        </div>
+
+        <div class="text-[11px] text-slate-400 flex items-center gap-2 pt-1">
+          <i class="fa-solid fa-mobile-retro text-amber-400"></i>
+          <span>Aussi disponible via <strong>D17 / e-Dinar Poste Tunisie</strong> sur le numéro : <strong class="text-white font-mono">22 000 111</strong></span>
+        </div>
+      </div>
+
+      <!-- SUBMIT RECHARGE PROOF FORM -->
+      <form onsubmit="handleRechargeProofSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+            Montant du Virement Effectué (TND) *
+          </label>
+          <input type="number" id="proof-amount" min="10" step="5" required placeholder="ex: 50" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-tnGreen text-sm">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+            Numéro de Transaction / Référence Virement *
+          </label>
+          <input type="text" id="proof-ref" required placeholder="ex: TRX-98765432" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-tnGreen text-sm">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+            Fichier Preuve / Reçu (Simulation Capture)
+          </label>
+          <div class="w-full bg-slate-950 border border-dashed border-slate-700 rounded-xl p-3 text-center text-xs text-slate-400 hover:border-tnGreen cursor-pointer">
+            <i class="fa-solid fa-cloud-arrow-up text-lg text-emerald-400 block mb-1"></i>
+            <span>Reçu_virement_RIB_AmenBank_07308.jpg (Inclus automatiquement)</span>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full bg-gradient-to-r from-tnGreen to-emerald-600 hover:from-tnGreenHover hover:to-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all text-sm flex items-center justify-center gap-2">
+          <i class="fa-solid fa-paper-plane"></i> Soumettre la Preuve de Paiement
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION SYSTEM -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- VANILLA JAVASCRIPT LOGIC & MOCK BACKEND STORE -->
+  <script>
+    // Global In-Memory Mock Database
+    const state = {
+      drivers: [
+        { id: 1, name: "Youssef Ben Ali", phone: "22123456", vehicle: "Renault Symbol", plate: "215 TU 9876", balance: -45.000, status: "Active" },
+        { id: 2, name: "Mohamed Salah", phone: "55987654", vehicle: "Renault Clio 4", plate: "201 TU 1234", balance: 25.000, status: "Active" },
+        { id: 3, name: "Sami Karray", phone: "98444555", vehicle: "Peugeot 208", plate: "198 TU 4321", balance: -110.000, status: "Blocked" },
+        { id: 4, name: "Kamel Trabelsi", phone: "20111222", vehicle: "Kia Rio", plate: "220 TU 5555", balance: 0.000, status: "Active" }
+      ],
+      rechargeProofs: [
+        { id: 101, driverId: 1, driverName: "Youssef Ben Ali", amount: 50.00, method: "RIB Amen Bank", ref: "TRX-8849201", date: "2026-10-21 21:15", status: "Pending" }
+      ],
+      totalCommissionsCollected: 142.500
+    };
+
+    // Navigation Switcher
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-tnGreen', 'text-white', 'shadow-sm');
+        btn.classList.add('text-slate-300');
+      });
+
+      const activeTab = document.getElementById(`tab-${tabId}`);
+      if (activeTab) activeTab.classList.remove('hidden');
+
+      const activeNav = document.getElementById(`nav-${tabId}`);
+      if (activeNav) {
+        activeNav.classList.add('bg-tnGreen', 'text-white', 'shadow-sm');
+        activeNav.classList.remove('text-slate-300');
+      }
+
+      if (tabId === 'admin') {
+        refreshAdminData();
+      }
+    }
+
+    function toggleMobileMenu() {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    }
+
+    // Fare Calculator Simulation
+    function calculateFare() {
+      const pickup = document.getElementById('pickup-location').value;
+      const dropoff = document.getElementById('dropoff-location').value;
+
+      let distance = 10;
+      let duration = 15;
+      let price = 12.000;
+
+      if (pickup === dropoff) {
+        distance = 3.5;
+        duration = 8;
+        price = 5.500;
+      } else if (pickup.includes('Aéroport') || dropoff.includes('Aéroport')) {
+        distance = 18.2;
+        duration = 25;
+        price = 22.000;
+      } else if (pickup.includes('Marsa') || dropoff.includes('Marsa')) {
+        distance = 14.5;
+        duration = 20;
+        price = 16.500;
+      }
+
+      const commission = price * 0.25;
+
+      document.getElementById('calc-distance').textContent = `${distance} km`;
+      document.getElementById('calc-time').textContent = `${duration} min`;
+      document.getElementById('calc-price').innerHTML = `${price.toFixed(3)} <span class="text-sm font-semibold">TND</span>`;
+      document.getElementById('calc-commission').textContent = `${commission.toFixed(3)} TND (Auto-déduit)`;
+    }
+
+    // Client Booking Handler
+    function handleBookingSubmit(e) {
+      e.preventDefault();
+      const confirmBox = document.getElementById('booking-confirmation-box');
+      confirmBox.classList.remove('hidden');
+      showToast('Course demandée avec succès ! Le chauffeur est en route.', 'success');
+    }
+
+    // Driver Recruitment 4-Field Handler
+    function handleRecruitmentSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('driver-fullname').value;
+      const phone = document.getElementById('driver-phone').value;
+      const vehicle = document.getElementById('driver-vehicle').value;
+      const plate = document.getElementById('driver-plate').value;
+
+      const newDriver = {
+        id: state.drivers.length + 1,
+        name: name,
+        phone: phone,
+        vehicle: vehicle,
+        plate: plate,
+        balance: 0.000,
+        status: "Active"
+      };
+
+      state.drivers.push(newDriver);
+      document.getElementById('recruitment-form').reset();
+      document.getElementById('recruitment-success').classList.remove('hidden');
+      showToast(`Chauffeur ${name} inscrit avec succès !`, 'success');
+    }
+
+    // Driver Mobile Simulator Duty Toggle
+    function toggleDriverDuty() {
+      const btn = document.getElementById('duty-toggle-btn');
+      const text = document.getElementById('duty-status-text');
+
+      if (text.textContent === 'EN SERVICE') {
+        text.textContent = 'HORS SERVICE';
+        btn.classList.remove('bg-emerald-500/20', 'text-emerald-400', 'border-emerald-500/40');
+        btn.classList.add('bg-slate-800', 'text-slate-400', 'border-slate-700');
+        showToast('Statut changé : Hors Service', 'info');
+      } else {
+        text.textContent = 'EN SERVICE';
+        btn.classList.add('bg-emerald-500/20', 'text-emerald-400', 'border-emerald-500/40');
+        btn.classList.remove('bg-slate-800', 'text-slate-400', 'border-slate-700');
+        showToast('Statut changé : En Service', 'success');
+      }
+    }
+
+    // Simulate Completed Ride on Driver App
+    function triggerSimulatedRide() {
+      const driver = state.drivers[0]; // Youssef Ben Ali
+      const ridePrice = 15.000;
+      const commission = ridePrice * 0.25; // 3.750 TND
+
+      driver.balance -= commission;
+      updateDriverSimulatorUI();
+      showToast(`Course terminée : +15.000 TND Cash encaissé (-3.750 TND commission déduite)`, 'success');
+    }
+
+    function updateDriverSimulatorUI() {
+      const balanceEl = document.getElementById('app-wallet-balance');
+      const driver = state.drivers[0];
+      const bal = driver.balance;
+
+      if (bal < 0) {
+        balanceEl.className = "text-2xl font-black text-rose-400 mt-0.5 block";
+      } else {
+        balanceEl.className = "text-2xl font-black text-emerald-400 mt-0.5 block";
+      }
+      balanceEl.innerHTML = `${bal.toFixed(3)} <span class="text-xs font-semibold text-slate-300">TND</span>`;
+    }
+
+    // Recharge Modal Control
+    function openRechargeModal() {
+      document.getElementById('recharge-modal').classList.remove('hidden');
+    }
+
+    function closeRechargeModal() {
+      document.getElementById('recharge-modal').classList.add('hidden');
+    }
+
+    function copyRIB() {
+      const ribText = document.getElementById('amen-rib-text').innerText;
+      
+      // Fallback copy using textarea for web iframe environment
+      const textarea = document.createElement('textarea');
+      textarea.value = ribText;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+
+      showToast('Votre RIB Amen Bank (07308006410581111081) a été copié !', 'success');
+    }
+
+    // Submit Recharge Proof
+    function handleRechargeProofSubmit(e) {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('proof-amount').value);
+      const ref = document.getElementById('proof-ref').value;
+
+      const newProof = {
+        id: Date.now(),
+        driverId: 1,
+        driverName: state.drivers[0].name,
+        amount: amount,
+        method: "RIB Amen Bank",
+        ref: ref,
+        date: new Date().toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' }),
+        status: "Pending"
+      };
+
+      state.rechargeProofs.push(newProof);
+      closeRechargeModal();
+      showToast(`Preuve de virement de ${amount} TND soumise au Super Admin avec succès !`, 'success');
+    }
+
+    // Admin Dashboard Render Logic
+    function refreshAdminData() {
+      document.getElementById('admin-stat-drivers').textContent = state.drivers.length;
+      document.getElementById('admin-stat-commissions').textContent = `${state.totalCommissionsCollected.toFixed(3)} TND`;
+      
+      const pendingCount = state.rechargeProofs.filter(p => p.status === 'Pending').length;
+      document.getElementById('admin-stat-pending').textContent = pendingCount;
+
+      // Render Pending Recharges Table
+      const rechargeTbody = document.getElementById('admin-recharge-table-body');
+      rechargeTbody.innerHTML = '';
+
+      if (state.rechargeProofs.length === 0) {
+        rechargeTbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-slate-500">Aucune preuve en attente.</td></tr>`;
+      } else {
+        state.rechargeProofs.forEach(p => {
+          const tr = document.createElement('tr');
+          tr.className = "hover:bg-slate-800/40 transition-colors";
+          tr.innerHTML = `
+            <td class="py-3 px-4 font-mono text-xs text-slate-400">${p.date}</td>
+            <td class="py-3 px-4 font-bold text-white">${p.driverName}</td>
+            <td class="py-3 px-4 text-xs text-sky-400 font-semibold">${p.method}</td>
+            <td class="py-3 px-4 font-extrabold text-emerald-400">+${p.amount.toFixed(3)} TND</td>
+            <td class="py-3 px-4 font-mono text-xs text-slate-400">${p.ref}</td>
+            <td class="py-3 px-4 text-center">
+              ${p.status === 'Pending' ? `
+                <div class="flex items-center justify-center gap-2">
+                  <button onclick="approveRecharge(${p.id})" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition-all">
+                    <i class="fa-solid fa-check mr-1"></i>Valider
+                  </button>
+                  <button onclick="rejectRecharge(${p.id})" class="px-3 py-1 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-bold transition-all">
+                    Refuser
+                  </button>
+                </div>
+              ` : `
+                <span class="px-2.5 py-1 rounded text-xs font-bold ${p.status === 'Approved' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-rose-500/20 text-rose-400'}">
+                  ${p.status === 'Approved' ? 'Validé' : 'Refusé'}
+                </span>
+              `}
+            </td>
+          `;
+          rechargeTbody.appendChild(tr);
+        });
+      }
+
+      // Render Drivers Table
+      const driversTbody = document.getElementById('admin-drivers-table-body');
+      driversTbody.innerHTML = '';
+
+      state.drivers.forEach(d => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-800/40 transition-colors";
+        const isNegative = d.balance < 0;
+        
+        tr.innerHTML = `
+          <td class="py-3 px-4 font-bold text-white">${d.name}</td>
+          <td class="py-3 px-4 font-mono text-xs text-slate-300">${d.phone}</td>
+          <td class="py-3 px-4 text-xs text-slate-300">${d.vehicle} (${d.plate})</td>
+          <td class="py-3 px-4 font-extrabold ${isNegative ? 'text-rose-400' : 'text-emerald-400'}">
+            ${d.balance.toFixed(3)} TND
+          </td>
+          <td class="py-3 px-4">
+            <span class="px-2 py-0.5 rounded text-[11px] font-bold ${d.status === 'Active' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}">
+              ${d.status === 'Active' ? 'Actif' : 'Bloqué (-100 TND)'}
+            </span>
+          </td>
+          <td class="py-3 px-4 text-center">
+            <button onclick="manualRechargePrompt(${d.id})" class="px-3 py-1 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg text-xs font-semibold transition-all">
+              <i class="fa-solid fa-plus-minus mr-1"></i>Ajuster Solde
+            </button>
+          </td>
+        `;
+        driversTbody.appendChild(tr);
+      });
+    }
+
+    // Approve RIB Recharge (Adds money to driver balance)
+    function approveRecharge(proofId) {
+      const proof = state.rechargeProofs.find(p => p.id === proofId);
+      if (!proof) return;
+
+      proof.status = 'Approved';
+
+      // Find driver and credit balance
+      const driver = state.drivers.find(d => d.id === proof.driverId);
+      if (driver) {
+        driver.balance += proof.amount;
+        if (driver.balance > -100) driver.status = "Active";
+      }
+
+      state.totalCommissionsCollected += proof.amount;
+
+      updateDriverSimulatorUI();
+      refreshAdminData();
+      showToast(`Recharge de ${proof.amount} TND approuvée pour ${proof.driverName}.`, 'success');
+    }
+
+    function rejectRecharge(proofId) {
+      const proof = state.rechargeProofs.find(p => p.id === proofId);
+      if (proof) {
+        proof.status = 'Rejected';
+        refreshAdminData();
+        showToast(`Preuve de virement refusée.`, 'error');
+      }
+    }
+
+    function manualRechargePrompt(driverId) {
+      const driver = state.drivers.find(d => d.id === driverId);
+      if (!driver) return;
+
+      const amountStr = prompt(`Recharger le portefeuille de ${driver.name} (Entrez le montant en TND) :`, "50");
+      if (amountStr) {
+        const amount = parseFloat(amountStr);
+        if (!isNaN(amount)) {
+          driver.balance += amount;
+          if (driver.balance > -100) driver.status = "Active";
+          updateDriverSimulatorUI();
+          refreshAdminData();
+          showToast(`Solde de ${driver.name} ajusté de +${amount.toFixed(3)} TND.`, 'success');
+        }
+      }
+    }
+
+    // Toast Notification Utility
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+
+      const bgClass = type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-rose-600' : 'bg-slate-800';
+
+      toast.className = `${bgClass} text-white px-4 py-3 rounded-xl shadow-2xl border border-white/10 text-xs font-bold flex items-center gap-2 transition-all transform translate-y-2 pointer-events-auto`;
+      toast.innerHTML = `
+        <i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-info'}"></i>
+        <span>${message}</span>
+      `;
+
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // Initial setup on load
+    window.onload = function() {
+      calculateFare();
+      updateDriverSimulatorUI();
+    };
+  </script>
+</body>
+</html>

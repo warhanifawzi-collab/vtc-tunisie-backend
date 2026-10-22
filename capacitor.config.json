@@ -1,0 +1,9 @@
+{
+  "appId": "com.vtctunisie.ultra",
+  "appName": "VTC Tunisie Ultra",
+  "webDir": "www",
+  "server": {
+    "url": "https://evil-doodles-lead.loca.lt",
+    "cleartext": true
+  }
+}
